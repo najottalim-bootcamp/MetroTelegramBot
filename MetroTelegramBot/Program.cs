@@ -6,7 +6,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-var botClient = new TelegramBotClient("{YOUR_TOKEN}");
+var botClient = new TelegramBotClient("YOUR_TOKEN");
 
 using CancellationTokenSource cts = new();
 
@@ -59,7 +59,7 @@ async Task HandlerMessage(ITelegramBotClient botClient, Update update, Cancellat
     else if (update.Message.Text != null)
     {
         ReplyKeyboardMarkup replyKeyboard = new ReplyKeyboardMarkup(
-            KeyboardButton.WithRequestLocation("SendLocation"));
+            KeyboardButton.WithRequestLocation("Send Location"));
 
         await botClient.SendTextMessageAsync(
             chatId: update.Message.Chat.Id,
@@ -94,12 +94,12 @@ async Task<SubwayLocation> NearSubwayAsync(double lat, double lon)
 
     var locationsJson = System.IO.File.ReadAllText(path);
     var result = JsonConvert.DeserializeObject<List<SubwayLocation>>(locationsJson);
-    double min = double.MinValue;
+    double min = double.MaxValue;
 
     SubwayLocation subwayLocation = new SubwayLocation();
     for (int i = 0; i < result.Count; i++)
     {
-        if (Math.Sqrt(Math.Pow((result[i].lat - lat), 2) + Math.Pow((result[i].lon - lon), 2)) > min)
+        if (Math.Sqrt(Math.Pow((result[i].lat - lat), 2) + Math.Pow((result[i].lon - lon), 2)) < min)
         {
             subwayLocation = result[i];
             min = Math.Sqrt(Math.Pow((result[i].lat - lat), 2) + Math.Pow((result[i].lon - lon), 2));
@@ -120,22 +120,3 @@ Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, 
     Console.WriteLine(ErrorMessage);
     return Task.CompletedTask;
 }
-
-
-
-//using System.Text.Json;
-
-//List<SubwayLocation> subwayLocations = new List<SubwayLocation>();
-//SubwayLocation subway = new SubwayLocation();
-
-//subway.name = "MIrzo Ulug'bek";
-//subway.lat = 56.7;
-//subway.lon = 100.8;
-
-//subwayLocations.Add(subway);
-//subwayLocations.Add(subway);
-//subwayLocations.Add(subway);
-
-//var res = JsonSerializer.Serialize(subwayLocations);
-
-//Console.WriteLine(res);
