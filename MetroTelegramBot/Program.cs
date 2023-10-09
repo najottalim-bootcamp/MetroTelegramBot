@@ -6,7 +6,8 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 
-var botClient = new TelegramBotClient("YOUR_TOKEN");
+// write your token
+var botClient = new TelegramBotClient("{YOUR_TOKEN}");
 
 using CancellationTokenSource cts = new();
 
@@ -90,7 +91,8 @@ async Task HandlerLocationAsync(ITelegramBotClient botClient, Update update, Can
 
 async Task<SubwayLocation> NearSubwayAsync(double lat, double lon)
 {
-    string path = "C:\\Users\\iddiu\\OneDrive\\Рабочий стол\\Projects\\MetroTelegramBot\\MetroTelegramBot\\JsonLocations.json";
+    // Write JsonLocation file path
+    string path = @"JsonLocations.json";
 
     var locationsJson = System.IO.File.ReadAllText(path);
     var result = JsonConvert.DeserializeObject<List<SubwayLocation>>(locationsJson);
